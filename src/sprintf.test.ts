@@ -91,4 +91,45 @@ describe('sprintf', () => {
   it('should ignore extra arguments', () => {
     expect(sprintf('Hello, %s!', 'world', 'extra')).toBe('Hello, world!');
   });
+
+  // New Verbs
+  it('should format a character code with %c', () => {
+    expect(sprintf('The character is %c.', 65)).toBe('The character is A.');
+  });
+
+  it('should format a number as octal with %o', () => {
+    expect(sprintf('10 in octal is %o.', 8)).toBe('10 in octal is 10.');
+  });
+
+  it('should print the type of a function', () => {
+    function myFunction() {}
+    expect(sprintf('Type of myFunction is %T', myFunction)).toBe('Type of myFunction is func myFunction');
+  });
+
+  // Precision and Padding
+  describe('Precision and Padding', () => {
+    it('should handle float precision with %.2f', () => {
+      expect(sprintf('%.2f', 123.456)).toBe('123.46');
+    });
+
+    it('should handle string precision with %.3s', () => {
+      expect(sprintf('%.3s', 'hello')).toBe('hel');
+    });
+
+    it('should handle right-padding with spaces', () => {
+      expect(sprintf('|%10s|', 'test')).toBe('|      test|');
+    });
+
+    it('should handle left-padding with spaces', () => {
+      expect(sprintf('|%-10s|', 'test')).toBe('|test      |');
+    });
+
+    it('should handle zero-padding for numbers', () => {
+      expect(sprintf('%05d', 42)).toBe('00042');
+    });
+
+    it('should combine padding and precision', () => {
+      expect(sprintf('%10.2f', 1.2345)).toBe('      1.23');
+    });
+  });
 });

@@ -1,59 +1,100 @@
 import { Placeholder } from './types';
 
 /**
- * Formats a value based on the provided placeholder verb.
- * @param verb The format specifier verb (e.g., 's', 'd').
+ * Represents the formatting options for a single placeholder.
+ */
+interface FormatOptions {
+  verb: Placeholder;
+  flags: string;
+  width?: number;
+  precision?: number;
+}
+
+/**
+ * Applies padding to a string based on width and flags.
+ */
+function applyPadding(s: string, options: FormatOptions): string {
+  const { width, flags } = options;
+  if (!width || s.length >= width) {
+    return s;
+  }
+
+  const padChar = flags.includes('0') ? '0' : ' ';
+  const padding = padChar.repeat(width - s.length);
+
+  return flags.includes('-') ? s + padding : padding + s;
+}
+
+/**
+ * Formats a value based on the provided placeholder verb and options.
+ * @param options The formatting options.
  * @param value The value to format.
  * @returns The formatted string.
  */
-export function formatValue(verb: Placeholder, value: any): string {
+export function formatValue(options: FormatOptions, value: any): string {
+  const { verb, precision } = options;
+  let formatted: string;
+
   switch (verb) {
     case 's':
-      return String(value);
-    case 'd':
-      return String(Number(value));
-    case 'b':
-      return (Number(value)).toString(2);
-    case 't':
-      return String(Boolean(value));
-    case 'j':
-      try {
-        return JSON.stringify(value);
-      } catch (e) {
-        if (e instanceof Error) {
-            return `[JSON.stringify error: ${e.message}]`;
-        }
-        return '[JSON.stringify error]';
+      formatted = String(value);
+      if (precision !== undefined) {
+        formatted = formatted.substring(0, precision);
       }
+      break;
+    case 'd':
+      formatted = String(Math.trunc(Number(value)));
+      break;
+    case 'b':
+      formatted = (Number(value)).toString(2);
+      break;
+    case 'o':
+      formatted = (Number(value)).toString(8);
+      break;
+    case 'c':
+      formatted = String.fromCharCode(Number(value));
+      break;
+    case 't':
+      formatted = String(Boolean(value));
+      break;
+    case 'j':
+      formatted = JSON.stringify(value);
+      break;
     case 'f':
-        return String(Number(value));
+      formatted = (Number(value)).toFixed(precision ?? 6);
+      break;
     case 'x':
-        return (Number(value)).toString(16);
+      formatted = (Number(value)).toString(16);
+      break;
     case 'X':
-        return (Number(value)).toString(16).toUpperCase();
+      formatted = (Number(value)).toString(16).toUpperCase();
+      break;
     case 'q':
-        return JSON.stringify(String(value));
+      formatted = JSON.stringify(String(value));
+      break;
     case 'T':
-        if (value === null) return 'null';
-        if (Array.isArray(value)) return 'array';
-        return typeof value;
+      if (typeof value === 'function') {
+        formatted = value.name ? `func ${value.name}` : 'func';
+      } else if (value === null) {
+        formatted = 'null';
+      } else if (Array.isArray(value)) {
+        formatted = 'array';
+      } else {
+        formatted = typeof value;
+      }
+      break;
     case 'v':
       if (value && typeof value.toString === 'function' && value.toString !== Object.prototype.toString) {
-        return value.toString();
+        formatted = value.toString();
+      } else if (typeof value === 'object' && value !== null) {
+        formatted = JSON.stringify(value);
+      } else {
+        formatted = String(value);
       }
-      if (typeof value === 'object' && value !== null) {
-        try {
-            return JSON.stringify(value);
-        } catch (e) {
-            if (e instanceof Error) {
-                return `[JSON.stringify error: ${e.message}]`;
-            }
-            return '[JSON.stringify error]';
-        }
-      }
-      return String(value);
+      break;
     default:
-      // This should not be reachable if the regex is correct.
-      return String(value);
+      formatted = String(value);
   }
+
+  return applyPadding(formatted, options);
 }

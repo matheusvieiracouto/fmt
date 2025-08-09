@@ -10,9 +10,11 @@
  * X - number (hex, uppercase)
  * q - string (quoted)
  * T - any (prints the type of the value)
+ * c - number (character code)
+ * o - number (octal)
  * v - any (default format)
  */
-export type Placeholder = 's' | 'd' | 'b' | 't' | 'j' | 'f' | 'x' | 'X' | 'q' | 'T' | 'v';
+export type Placeholder = 's' | 'd' | 'b' | 't' | 'j' | 'f' | 'x' | 'X' | 'q' | 'T' | 'c' | 'o' | 'v';
 
 /**
  * Maps a format specifier to its corresponding TypeScript type.
@@ -28,6 +30,8 @@ export type TypeFromPlaceholder<P extends Placeholder> =
   P extends 'X' ? number :
   P extends 'q' ? string :
   P extends 'T' ? any :
+  P extends 'c' ? number :
+  P extends 'o' ? number :
   P extends 'v' ? any :
   never;
 
