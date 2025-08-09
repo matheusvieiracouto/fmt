@@ -1,2 +1,3 @@
-// Main file for the go-fmt-ts library
-export * from './fmt';
+export * from './sprintf';
+export * from './println';
+export * from './types';

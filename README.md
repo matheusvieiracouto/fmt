@@ -47,9 +47,14 @@ The following format specifiers are supported:
 |-----------|-----------|-------------------------------------------|
 | `%s`      | `string`  | Formats a string.                         |
 | `%d`      | `number`  | Formats a number as a decimal integer.    |
+| `%f`      | `number`  | Formats a number as a floating-point value. |
 | `%b`      | `number`  | Formats a number as a binary integer.     |
+| `%x`      | `number`  | Formats a number as a lowercase hexadecimal integer. |
+| `%X`      | `number`  | Formats a number as an uppercase hexadecimal integer. |
 | `%t`      | `boolean` | Formats a boolean as `true` or `false`.   |
+| `%q`      | `string`  | Formats a string as a double-quoted string. |
 | `%j`      | `object`  | Formats an object as a JSON string.       |
+| `%T`      | `any`     | Formats a value as its TypeScript type.   |
 | `%v`      | `any`     | Formats any value in a default way.       |
 
 ### Custom Formatting with `toString()`
