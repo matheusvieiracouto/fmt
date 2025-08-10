@@ -1,5 +1,5 @@
-import { sprintf } from './sprintf';
-import { ExtractArgs } from './types';
+import { sprintf } from './sprintf.ts';
+import { ExtractArgs } from './types.ts';
 
 /**
  * Formats a string according to a format specifier and prints it to the console.

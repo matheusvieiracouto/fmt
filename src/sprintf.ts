@@ -1,5 +1,5 @@
-import { ExtractArgs, Placeholder } from './types';
-import { formatValue } from './formatValue';
+import { ExtractArgs, Placeholder } from './types.ts';
+import { formatValue } from './formatValue.ts';
 
 /**
  * Represents the formatting options for a single placeholder.
